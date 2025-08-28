@@ -14,13 +14,14 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
-import {userValidation} from "@/lib/validations/user";
+import {threadValidation} from "@/lib/validations/thread";
 
 import {Textarea} from "@/components/ui/textarea";
 
 import User from "@/lib/models/user.model";
 import {usePathname, useRouter} from "next/navigation";
 import {updateUser} from "@/lib/actions/user.actions";
+import {createThread} from "@/lib/actions/thread.actions";
 interface props{
     user:{
         id:string;
@@ -34,18 +35,23 @@ interface props{
 
 }
 
-export default  function Thread(){
+export default  function ThreadForm({userId}:{userId:string}){
     const pathname= usePathname()
     const router=useRouter();
     const form=useForm({
-        resolver:zodResolver(userValidation),
+        resolver:zodResolver(threadValidation),
         defaultValues:{
-
+         thread:'',
+            accountId:userId
         }
     })
 
-    async function onSubmit(values: z.infer<typeof userValidation>) {
+    const  onSubmit=async(values: z.infer<typeof threadValidation>)=> {
 
+await createThread({text:values.thread,
+    author:userId,communityId:null,path:pathname
+});
+router.push("/")
 
 
 
@@ -56,26 +62,26 @@ export default  function Thread(){
   return(  <>
 
           <Form {...form} >
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-10">
 
 
             <FormField
                 control={form.control}
-                name="bio"
+                name="thread"
                 render={({ field }) => (
                     <FormItem>
                         <FormLabel>
-                            Bio
+                           Thread
                         </FormLabel>
-                        <FormControl>
-                            <Textarea  placeholder="Your bio" rows={10}  {...field}   className="resize-none no-focus" />
+                        <FormControl  className="resize-none no-focus bg-slate-900 text-white border-slate-800" >
+                            <Textarea  placeholder="write thread here..." rows={15} className="p-4" {...field}   />
                         </FormControl>
 <FormMessage/>
                     </FormItem>
                 )}
             />
 
-            <Button type="submit">Submit</Button>
+            <Button type="submit"  className="bg-primary w-full">Submit</Button>
         </form>
     </Form>
       </>

@@ -3,10 +3,13 @@ import {sidebarLinks} from "@/constants";
 import Link from "next/link";
 import Image from "next/image";
 import{usePathname,useRouter} from "next/navigation";
-import {SignedIn, SignOutButton} from "@clerk/nextjs";
+import {SignedIn, SignOutButton,useAuth} from "@clerk/nextjs";
 
-export default function LeftSidebar(){
+export default   function LeftSidebar(){
     const path=usePathname();
+
+    const { isLoaded, userId } = useAuth();
+    console.log(userId);
     const router=useRouter();
     return (
         <section className="left-sidebar">
@@ -14,11 +17,16 @@ export default function LeftSidebar(){
             {sidebarLinks.map((link)=>{
    const isactive=(path.includes(link.route)&&link.route.length>1)||path===link.route?"bg-primary":"";
                //  @ts-ignore
+                const route:string=link.route==="/profile"?`${link.route}/${userId}`:link.route;
+
+                if(link.route==="/profile"&&(!isLoaded||!userId))return null;
+
+
                 return (
                   <div key={link.label} className={`flex gap-4 cursor-pointer`}>
 
 
-                    <Link href={`/${link.route}`} className={`left-sidebar-link ${isactive}`}>
+                    <Link href={route} className={`left-sidebar-link ${isactive}`}>
                         <Image src={link.imgURL} alt={link.label} width={24} height={24} />
                      <p className="max-lg:hidden">{link.label}</p>
                     </Link>

@@ -6,7 +6,7 @@ export default function Topbar(){
     return (
     <nav className="top-bar">
 
-        <Link href="/public" className="flex items-center gap-4">
+        <Link href="/" className="flex items-center gap-4">
             <Image src="/assets/logo.svg" alt="logo" width={28} height={28}/>
             <p className="head-text max-xs:hidden">
            Threads</p>

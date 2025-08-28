@@ -127,14 +127,16 @@ return(
                 render={({ field }) => (
                     <FormItem>
                         <FormLabel>
-                            {field.value?(<Image  src={field.value} priority="true" alt={"profile pic"} width={49} height={49} className=" rounded-full object-contain"></Image> ):(<Image  src="/assets/profile.svg" alt={"profile pic"} width={20} height={20} className=" object-contain "></Image>)}
+                            {field.value?
+                                (<div className={"w-[50px] h-[50px] rounded-full "}>
+                                    <Image  src={field.value} priority="true" alt={"profile pic"} width={49} height={49} className=" rounded-full w-full h-full object-cover"></Image></div> ):(<Image  src="/assets/profile.svg" alt={"profile pic"} width={20} height={20} className=" object-contain "></Image>)}
                         </FormLabel>
                         <FormControl>
                             <Input className="no-focus" placeholder="Upload your profile pic" type="file" accept="image/*" onChange={(e)=>{
                                 handleImage(e,field.onChange)
                             }}  />
                         </FormControl>
-
+<FormMessage/>
                     </FormItem>
                 )}
             />
@@ -150,7 +152,7 @@ return(
                         <FormControl>
                             <Input className="no-focus" placeholder="Name" type="text" {...field} />
                         </FormControl>
-
+<FormMessage/>
                     </FormItem>
                 )}
             />
@@ -167,7 +169,7 @@ return(
                         <FormControl>
                             <Input className="no-focus" placeholder="username" type="text" {...field}  />
                         </FormControl>
-
+     <FormMessage/>
                     </FormItem>
                 )}
             />
@@ -183,7 +185,7 @@ return(
                         <FormControl>
                             <Textarea  placeholder="Your bio" rows={10} {...field}   className="resize-none no-focus" />
                         </FormControl>
-
+<FormMessage/>
                     </FormItem>
                 )}
             />

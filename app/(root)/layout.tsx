@@ -6,7 +6,7 @@ import Bottombar from "@/components/shared/Bottombar";
 import RightSidebar from "@/components/shared/RightSidebar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 export const metadata = {
-    title: 'Thread like clone',
+    title: 'ThreadForm like clone',
     description: 'Next js thread clone',
 }
 
