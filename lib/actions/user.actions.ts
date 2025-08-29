@@ -4,6 +4,7 @@ import {revalidatePath} from "next/cache";
 import User from "@/lib/models/user.model";
 import {FilterQuery, SortOrder} from "mongoose";
 import Thread from "@/lib/models/thread.model";
+import Community from "@/lib/models/community.model";
 
 interface params{
     id:string,
@@ -52,7 +53,10 @@ export async function fetchUserById(userid:string){
 export async function fetchUser(userid:string){
     try{
         await connectDB();
-        const user= await User.findOne({id:userid});
+        const user= await User.findOne({id:userid}).populate({
+            path:"communities",
+            model:Community
+        });
         return user;
         // .populate({path:'communities',model:Community})
     }catch(err:any){

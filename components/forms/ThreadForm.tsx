@@ -1,5 +1,5 @@
 "use client"
-
+import{useOrganization} from '@clerk/nextjs'
 import { zodResolver} from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -38,6 +38,8 @@ interface props{
 export default  function ThreadForm({userId}:{userId:string}){
     const pathname= usePathname()
     const router=useRouter();
+    const {organization}=useOrganization();
+
     const form=useForm({
         resolver:zodResolver(threadValidation),
         defaultValues:{
@@ -47,16 +49,17 @@ export default  function ThreadForm({userId}:{userId:string}){
     })
 
     const  onSubmit=async(values: z.infer<typeof threadValidation>)=> {
+// console.log(organization?.id)
+    await createThread({text:values.thread,
+        author:userId,communityId:organization?organization.id:null,path:pathname
+    });
 
-await createThread({text:values.thread,
-    author:userId,communityId:null,path:pathname
-});
 router.push("/")
 
 
 
 
-        console.log(values)
+      //  console.log(values)
     }
 
   return(  <>

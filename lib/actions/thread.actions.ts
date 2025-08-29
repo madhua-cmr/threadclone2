@@ -3,6 +3,7 @@ import {connectDB} from "@/lib/mongoose";
 import Thread from "@/lib/models/thread.model";
 import User from "@/lib/models/user.model";
 import {revalidatePath} from "next/cache";
+import Community from "@/lib/models/community.model";
 
 interface Params{
     text:string,
@@ -14,15 +15,30 @@ export async function createThread({text,author,communityId,path}:Params){
 
     try {
       await  connectDB();
-    const createdThread=await Thread.create({
-        text,
-        author,
-        community:null,
+       // console.log("community id from backend",communityId);
+      const communityIdObject=await Community.findOne(
+          {id:communityId},{_id:1}
+      )
+console.log("communityOrgId",communityIdObject)
 
-    })
+            const createdThread=await Thread.create({
+                    text,
+                    author,
+                    community:communityIdObject
+
+                })
+
+
+
+
     await User.findByIdAndUpdate(author,{
         $push:{threads:createdThread._id}
     })
+        if(communityIdObject){
+            await Community.findByIdAndUpdate(communityIdObject,{
+                $push:{threads:createdThread._id},
+            })
+        }
     revalidatePath(path);
 }
 catch(err:any){

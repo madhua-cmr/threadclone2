@@ -34,9 +34,9 @@ type Event = {
     type: EventType;
 };
 
-export const POST = async (request: Request) => {
-    const payload = await request.json();
-    const header = headers();
+export async function POST(request: Request) {
+    const payload = await request.text();
+    const header =await  headers();
 
     const heads = {
         "svix-id": header.get("svix-id"),
@@ -60,7 +60,8 @@ export const POST = async (request: Request) => {
     }
 
     const eventType: EventType = evnt?.type!;
-
+    console.log("Webhook event type:", eventType);
+    console.log("Webhook full payload:", JSON.stringify(evnt, null, 2));
     // Listen organization creation event
     if (eventType === "organization.created") {
         // Resource: https://clerk.com/docs/reference/backend-api/tag/Organizations#operation/CreateOrganization
@@ -70,6 +71,9 @@ export const POST = async (request: Request) => {
 
         try {
             // @ts-ignore
+            // @ts-ignore
+            console.log("Creating org with data:", { id, name, slug, logo_url, image_url, created_by });
+
             await createCommunity(
                 // @ts-ignore
                 id,

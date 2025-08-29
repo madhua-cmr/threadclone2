@@ -5,7 +5,7 @@ import {ThreadCard} from "@/components/cards/ThreadCard";
 export default async function Home() {
     const data=await fetchPosts(1,20);
 const user=await currentUser();
-console.log(data);
+// console.log(data);
   return (
       <>
           <section>
