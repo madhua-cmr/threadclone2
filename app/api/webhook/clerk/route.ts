@@ -34,7 +34,7 @@ type Event = {
     type: EventType;
 };
 
-export const POST = async (request: Request) => {
+export async function POST (request: Request) {
     const payload = await request.json();
     const header = headers();
 
@@ -55,7 +55,9 @@ export const POST = async (request: Request) => {
             JSON.stringify(payload),
             heads as IncomingHttpHeaders & WebhookRequiredHeaders
         ) as Event;
+        console.log("Webhook event:", evnt);
     } catch (err) {
+        console.error("Webhook verification failed:", err);
         return NextResponse.json({ message: err }, { status: 400 });
     }
 
