@@ -5,8 +5,9 @@ import { FilterQuery, SortOrder } from "mongoose";
 import Community from "../models/community.model";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
+import {connectDB} from "@/lib/mongoose";
 
-import { connectDB } from "../mongoose";
+
 
 export async function createCommunity(
     id: string,
@@ -18,10 +19,10 @@ export async function createCommunity(
 ) {
     try {
         await connectDB();
-console.log("hi")
+
         // Find the user with the provided unique id
         const user = await User.findOne({ id: createdById });
-        console.log("hi1",user)
+
         if (!user) {
             throw new Error("User not found"); // Handle the case if the user with the id is not found
         }
@@ -34,9 +35,9 @@ console.log("hi")
             bio,
             createdBy: user._id, // Use the mongoose ID of the user
         });
-        console.log("hi2")
+
         const createdCommunity = await newCommunity.save();
-        console.log("hi3")
+
         // Update User model
         user.communities.push(createdCommunity._id);
         await user.save();
@@ -250,7 +251,6 @@ export async function updateCommunityInfo(
 ) {
     try {
         await connectDB();
-
         // Find the community by its _id and update the information
         const updatedCommunity = await Community.findOneAndUpdate(
             { id: communityId },
@@ -271,7 +271,7 @@ export async function updateCommunityInfo(
 
 export async function deleteCommunity(communityId: string) {
     try {
-       await connectDB();
+        await connectDB();
 
         // Find the community by its ID and delete it
         const deletedCommunity = await Community.findOneAndDelete({
